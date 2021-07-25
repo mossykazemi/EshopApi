@@ -55,6 +55,9 @@ namespace EshopApi.Controllers
         [HttpPost]
         public async Task<IActionResult> PostCustomer([FromBody] Customer customer)
         {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
             _context.Customers.Add(customer);
             await _context.SaveChangesAsync();
             return CreatedAtAction("GetCustomer", new { id = customer.CustomerId }, customer);
