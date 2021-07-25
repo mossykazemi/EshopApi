@@ -9,6 +9,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using EshopApi.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace EshopApi
 {
@@ -25,6 +27,10 @@ namespace EshopApi
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
+            services.AddDbContext<EshopApi_DBContext>(options =>
+            {
+                options.UseSqlServer(Configuration.GetConnectionString("EshopApiConnection"));
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
