@@ -28,18 +28,29 @@ namespace EshopApi.Controllers
             {
                 StatusCode = (int)HttpStatusCode.OK
             };
-            Request.HttpContext.Response.Headers.Add("X-Count",_context.Customers.Count().ToString());
-            Request.HttpContext.Response.Headers.Add("X-Name","Mostafa Kazemi");
+            Request.HttpContext.Response.Headers.Add("X-Count", _context.Customers.Count().ToString());
+            Request.HttpContext.Response.Headers.Add("X-Name", "Mostafa Kazemi");
             return result;
         }
 
         [HttpGet("{id}")]
         public async Task<IActionResult> GetCustomer([FromRoute] int id)
         {
-            var customer = await _context.Customers.FirstOrDefaultAsync(c => c.CustomerId == id);
-            return Ok(customer);
+            if (CustomerExists(id))
+            {
+                var customer = await _context.Customers.FirstOrDefaultAsync(c => c.CustomerId == id);
+                return Ok(customer);
+            }
+            else
+            {
+                return NotFound();
+            }
         }
 
+        private bool CustomerExists(int id)
+        {
+            return _context.Customers.Any(c => c.CustomerId == id);
+        }
 
         [HttpPost]
         public async Task<IActionResult> PostCustomer([FromBody] Customer customer)
