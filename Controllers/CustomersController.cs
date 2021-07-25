@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
 using EshopApi.Models;
 using Microsoft.EntityFrameworkCore;
@@ -23,7 +24,13 @@ namespace EshopApi.Controllers
         [HttpGet]
         public IActionResult GetCustomer()
         {
-            return new ObjectResult(_context.Customers);
+            var result = new ObjectResult(_context.Customers)
+            {
+                StatusCode = (int)HttpStatusCode.OK
+            };
+            Request.HttpContext.Response.Headers.Add("X-Count",_context.Customers.Count().ToString());
+            Request.HttpContext.Response.Headers.Add("X-Name","Mostafa Kazemi");
+            return result;
         }
 
         [HttpGet("{id}")]
@@ -32,6 +39,7 @@ namespace EshopApi.Controllers
             var customer = await _context.Customers.FirstOrDefaultAsync(c => c.CustomerId == id);
             return Ok(customer);
         }
+
 
         [HttpPost]
         public async Task<IActionResult> PostCustomer([FromBody] Customer customer)
