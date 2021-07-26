@@ -21,7 +21,7 @@ namespace EshopApi.Models
         public virtual DbSet<Order> Orders { get; set; }
         public virtual DbSet<OrderItem> OrderItems { get; set; }
         public virtual DbSet<Product> Products { get; set; }
-        public virtual DbSet<SalesPerson> SalesPeople { get; set; }
+        public virtual DbSet<SalesPerson> SalesPersons { get; set; }
 
        
 
