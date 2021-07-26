@@ -8,10 +8,6 @@ namespace EshopApi.Models
 {
     public partial class EshopApi_DBContext : DbContext
     {
-        public EshopApi_DBContext()
-        {
-        }
-
         public EshopApi_DBContext(DbContextOptions<EshopApi_DBContext> options)
             : base(options)
         {
@@ -23,7 +19,7 @@ namespace EshopApi.Models
         public virtual DbSet<Product> Products { get; set; }
         public virtual DbSet<SalesPerson> SalesPersons { get; set; }
 
-       
+
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

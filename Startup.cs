@@ -31,7 +31,7 @@ namespace EshopApi
             services.AddControllers();
             services.AddDbContext<EshopApi_DBContext>(options =>
             {
-                options.UseSqlServer(Configuration.GetConnectionString("EshopApiConnection"));
+                options.UseSqlServer("Data Source=MOSSY;Initial Catalog=EshopApi_DB;Integrated Security=true;");
             });
 
             services.AddTransient<ICustomerRepository, CustomerRepository>();
