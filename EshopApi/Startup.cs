@@ -35,6 +35,7 @@ namespace EshopApi
             });
 
             services.AddTransient<ICustomerRepository, CustomerRepository>();
+            services.AddResponseCaching();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -48,6 +49,8 @@ namespace EshopApi
             app.UseRouting();
 
             app.UseAuthorization();
+
+            app.UseResponseCaching();
 
             app.UseEndpoints(endpoints =>
             {
