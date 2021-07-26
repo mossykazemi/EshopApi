@@ -13,5 +13,6 @@ namespace EshopApi.Contracts
         Task<Customer> Update(Customer customer);
         Task<Customer> Remove(int id);
         Task<bool> IsExists(int id);
+        Task<int> CountCustomer();
     }
 }

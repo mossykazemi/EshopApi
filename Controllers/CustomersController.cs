@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
+using EshopApi.Contracts;
 using EshopApi.Models;
 using Microsoft.EntityFrameworkCore;
 
@@ -14,21 +15,22 @@ namespace EshopApi.Controllers
     [ApiController]
     public class CustomersController : ControllerBase
     {
-        private EshopApi_DBContext _context;
+        private ICustomerRepository _customerRepository;
 
-        public CustomersController(EshopApi_DBContext context)
+        public CustomersController(ICustomerRepository customerRepository)
         {
-            _context = context;
+            _customerRepository = customerRepository;
         }
+
 
         [HttpGet]
         public IActionResult GetCustomer()
         {
-            var result = new ObjectResult(_context.Customers)
+            var result = new ObjectResult(_customerRepository.GetAll())
             {
                 StatusCode = (int)HttpStatusCode.OK
             };
-            Request.HttpContext.Response.Headers.Add("X-Count", _context.Customers.Count().ToString());
+            Request.HttpContext.Response.Headers.Add("X-Count", _customerRepository.CountCustomer().ToString());
             Request.HttpContext.Response.Headers.Add("X-Name", "Mostafa Kazemi");
             return result;
         }
@@ -36,9 +38,9 @@ namespace EshopApi.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> GetCustomer([FromRoute] int id)
         {
-            if (CustomerExists(id))
+            if (await CustomerExists(id))
             {
-                var customer = await _context.Customers.FirstOrDefaultAsync(c => c.CustomerId == id);
+                var customer = await _customerRepository.Find(id);
                 return Ok(customer);
             }
             else
@@ -47,9 +49,9 @@ namespace EshopApi.Controllers
             }
         }
 
-        private bool CustomerExists(int id)
+        private async Task<bool> CustomerExists(int id)
         {
-            return _context.Customers.Any(c => c.CustomerId == id);
+            return await _customerRepository.IsExists(id);
         }
 
         [HttpPost]
@@ -58,25 +60,21 @@ namespace EshopApi.Controllers
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            _context.Customers.Add(customer);
-            await _context.SaveChangesAsync();
+            await _customerRepository.Add(customer);
             return CreatedAtAction("GetCustomer", new { id = customer.CustomerId }, customer);
         }
 
         [HttpPut("{id}")]
         public async Task<IActionResult> PutCustomer([FromRoute] int id, [FromBody] Customer customer)
         {
-            _context.Entry(customer).State = EntityState.Modified;
-            await _context.SaveChangesAsync();
+            await _customerRepository.Update(customer);
             return Ok(customer);
         }
 
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteCustomer([FromRoute] int id)
         {
-            var customer = await _context.Customers.FindAsync(id);
-            _context.Customers.Remove(customer);
-            await _context.SaveChangesAsync();
+            await _customerRepository.Remove(id);
             return Ok();
         }
     }
