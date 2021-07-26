@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using EshopApi.Contracts;
 using EshopApi.Models;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Caching.Memory;
 
 namespace EshopApi.Controllers
 {
