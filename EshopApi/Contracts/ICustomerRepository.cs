@@ -1,7 +1,6 @@
-﻿using System.Collections;
+﻿using EshopApi.Models;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using EshopApi.Models;
 
 namespace EshopApi.Contracts
 {
