@@ -48,7 +48,7 @@ namespace EshopApi
                         ValidateLifetime = true,
                         ValidateIssuerSigningKey = true,
                         ValidIssuer = "http://localhost:21747",
-                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("VerifyMostafa"))
+                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("VerifyMostafaSampleToken"))
                     };
                 });
 
@@ -56,11 +56,14 @@ namespace EshopApi
             {
                 options.AddPolicy("EnableCors", builder =>
                 {
-                    builder.AllowAnyOrigin()
+                    builder
+                        .SetIsOriginAllowed(hostname => true)
+                        //.AllowAnyOrigin()
                         .AllowAnyHeader()
                         .AllowAnyMethod()
                         .AllowCredentials()
                         .Build();
+
                 });
             });
         }
@@ -75,9 +78,9 @@ namespace EshopApi
 
             app.UseRouting();
 
-            app.UseCors("EnableCors");
-
             app.UseAuthentication();
+
+            app.UseCors("EnableCors");
 
             app.UseAuthorization();
 
