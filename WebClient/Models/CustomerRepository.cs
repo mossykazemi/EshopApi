@@ -48,7 +48,7 @@ namespace WebClient.Models
 
             StringContent content = new StringContent(jsonCustomer, Encoding.UTF8, "application/json");
 
-            var res = _client.PutAsync(apiUrl, content).Result;
+            var res = _client.PutAsync(apiUrl+"/"+customer.CustomerId, content).Result;
         }
 
         public void DeleteCustomer(int customerId)

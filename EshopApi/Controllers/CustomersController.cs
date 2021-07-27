@@ -18,7 +18,7 @@ namespace EshopApi.Controllers
         }
 
         [HttpGet]
-        [ResponseCache(Duration = 60)]
+        //[ResponseCache(Duration = 60)]
         public IActionResult GetCustomer()
         {
             var result = new ObjectResult(_customerRepository.GetAll())
