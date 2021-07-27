@@ -1,13 +1,12 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace EshopApi.Models
+namespace WebClient.Models
 {
-    public class Login
+    public class LoginViewModel
     {
         [Required]
         public string UserName { get; set; }
         [Required]
         public string Password { get; set; }
-
     }
 }

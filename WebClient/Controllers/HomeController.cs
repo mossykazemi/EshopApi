@@ -1,10 +1,11 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using System.Diagnostics;
 using WebClient.Models;
 
 namespace WebClient.Controllers
 {
+    [Authorize]
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
@@ -18,7 +19,8 @@ namespace WebClient.Controllers
 
         public IActionResult Index()
         {
-            return View(_customer.GetAllCustomer());
+            string token = User.FindFirst("AccessToken").Value;
+            return View(_customer.GetAllCustomer(token));
         }
 
         public IActionResult Create()

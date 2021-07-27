@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Text;
 
 namespace WebClient.Models
@@ -15,8 +16,10 @@ namespace WebClient.Models
             _client = new HttpClient();
         }
 
-        public List<Customer> GetAllCustomer()
+        public List<Customer> GetAllCustomer(string token)
         {
+            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
             var result = _client.GetStringAsync(apiUrl).Result;
 
             List<Customer> list = JsonConvert.DeserializeObject<List<Customer>>(result);
@@ -48,7 +51,7 @@ namespace WebClient.Models
 
             StringContent content = new StringContent(jsonCustomer, Encoding.UTF8, "application/json");
 
-            var res = _client.PutAsync(apiUrl+"/"+customer.CustomerId, content).Result;
+            var res = _client.PutAsync(apiUrl + "/" + customer.CustomerId, content).Result;
         }
 
         public void DeleteCustomer(int customerId)

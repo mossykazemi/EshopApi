@@ -1,4 +1,3 @@
-using System.Text;
 using EshopApi.Contracts;
 using EshopApi.Models;
 using EshopApi.Repositories;
@@ -10,6 +9,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 namespace EshopApi
 {
@@ -75,12 +75,11 @@ namespace EshopApi
             {
                 app.UseDeveloperExceptionPage();
             }
-
             app.UseRouting();
 
-            app.UseAuthentication();
-
             app.UseCors("EnableCors");
+
+            app.UseAuthentication();
 
             app.UseAuthorization();
 

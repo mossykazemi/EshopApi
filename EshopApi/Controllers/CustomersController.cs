@@ -1,15 +1,15 @@
 ﻿using EshopApi.Contracts;
 using EshopApi.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
 
 namespace EshopApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize]
+    [Authorize(AuthenticationSchemes = "Bearer")]
     public class CustomersController : ControllerBase
     {
         private ICustomerRepository _customerRepository;
