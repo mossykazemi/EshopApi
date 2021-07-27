@@ -1,12 +1,15 @@
+using System.Text;
 using EshopApi.Contracts;
 using EshopApi.Models;
 using EshopApi.Repositories;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.IdentityModel.Tokens;
 
 namespace EshopApi
 {
@@ -23,14 +26,43 @@ namespace EshopApi
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
+
+            //Connection String
             services.AddDbContext<EshopApi_DBContext>(options =>
             {
                 options.UseSqlServer("Data Source=MOSSY;Initial Catalog=EshopApi_DB;Integrated Security=true;");
             });
-
+            //IOC
             services.AddTransient<ICustomerRepository, CustomerRepository>();
+            //Cache
             services.AddResponseCaching();
             services.AddMemoryCache();
+            //JWT
+            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+                .AddJwtBearer(options =>
+                {
+                    options.TokenValidationParameters = new TokenValidationParameters()
+                    {
+                        ValidateIssuer = true,
+                        ValidateAudience = false,
+                        ValidateLifetime = true,
+                        ValidateIssuerSigningKey = true,
+                        ValidIssuer = "http://localhost:21747",
+                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("VerifyMostafa"))
+                    };
+                });
+
+            services.AddCors(options =>
+            {
+                options.AddPolicy("EnableCors", builder =>
+                {
+                    builder.AllowAnyOrigin()
+                        .AllowAnyHeader()
+                        .AllowAnyMethod()
+                        .AllowCredentials()
+                        .Build();
+                });
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -42,6 +74,10 @@ namespace EshopApi
             }
 
             app.UseRouting();
+
+            app.UseCors("EnableCors");
+
+            app.UseAuthentication();
 
             app.UseAuthorization();
 
