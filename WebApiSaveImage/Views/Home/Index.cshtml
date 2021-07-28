@@ -10,10 +10,10 @@
         <dd><input type="text" id="family" class="form-control" /></dd>
 
         <dt>Phone :</dt>
-        <dd><input type="text" id="mobile" class="form-control" /></dd>
+        <dd><input type="text" id="phone" class="form-control" /></dd>
 
         <dt>Image :</dt>
-        <dd><input type="text" id="image" class="form-control" /></dd>
+        <dd><input type="file" id="image" class="form-control" /></dd>
 
         <dt></dt>
         <dd>
@@ -26,7 +26,7 @@
         <tr>
             <th>Name</th>
             <th>Family</th>
-            <th>Mobile</th>
+            <th>Phone</th>
             <th>Image</th>
         </tr>
         <tbody id="tb">
@@ -41,17 +41,25 @@
         $(function () {
             $.getJSON("/Api/People",
                 function (data) {
-                    $.each(data),
+                    $.each(data,
                         function (i, item) {
-
+                            console.log(item);
                             var append = "<tr>" +
-                                "<td>" + item.name + "</td>" +
-                                "<td>" + item.family + "</td>" +
-                                "<td>" + item.mobile + "</td>" +
-                                "<td><img style='width:90px' src='" + item.imageName + "'/></td>" +
+                                "<td>" +
+                                item.name +
+                                "</td>" +
+                                "<td>" +
+                                item.family +
+                                "</td>" +
+                                "<td>" +
+                                item.phone +
+                                "</td>" +
+                                "<td><img style='width:90px' src='/images/" +
+                                item.imageName +
+                                "'/></td>" +
                                 "</tr>";
                             $("#tb").append(append);
-                        };
+                        });
                 });
         });
 
@@ -59,7 +67,7 @@
             var model = new FormData();
             model.append("Name", $("#name").val());
             model.append("Family", $("#family").val());
-            model.append("Mobile", $("#mobile").val());
+            model.append("Phone", $("#phone").val());
             model.append("Image", $("#image")[0].files[0]);
 
 
@@ -74,14 +82,14 @@
                     var append = "<tr>" +
                         "<td>" + data.responseJSON.name + "</td>" +
                         "<td>" + data.responseJSON.family + "</td>" +
-                        "<td>" + data.responseJSON.mobile + "</td>" +
-                        "<td><img style='width:90px' src='" + data.responseJSON.imageName + "'/></td>" +
+                        "<td>" + data.responseJSON.phone + "</td>" +
+                        "<td><img style='width:90px' src='/images/" + data.responseJSON.imageName + "'/></td>" +
                         "</tr>";
                     $("#tb").append(append);
 
                     $("#name").val("");
                     $("#family").val("");
-                    $("#mobile").val("");
+                    $("#phone").val("");
                 }
             });
         }
