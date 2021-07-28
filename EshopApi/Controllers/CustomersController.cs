@@ -9,7 +9,7 @@ namespace EshopApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize(AuthenticationSchemes = "Bearer")]
+    //[Authorize(AuthenticationSchemes = "Bearer")]
     public class CustomersController : ControllerBase
     {
         private ICustomerRepository _customerRepository;

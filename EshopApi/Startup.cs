@@ -1,3 +1,4 @@
+using System.IO;
 using EshopApi.Contracts;
 using EshopApi.Models;
 using EshopApi.Repositories;
@@ -10,6 +11,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using Microsoft.OpenApi.Models;
 
 namespace EshopApi
 {
@@ -66,6 +68,16 @@ namespace EshopApi
 
                 });
             });
+
+            //Swagger
+            services.AddSwaggerGen(swagger =>
+            {
+                swagger.SwaggerDoc("v1",new OpenApiInfo
+                {
+                    Title = "My First Swagger"
+                });
+                //swagger.IncludeXmlComments(Path.Combine(Directory.GetCurrentDirectory(),@"EshopApi\EshopApi\EshopApi.xml"));
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -83,6 +95,11 @@ namespace EshopApi
 
             app.UseAuthorization();
 
+            app.UseSwagger();
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("/swagger/v1/swagger.json","My First Swagger");
+            });
             app.UseResponseCaching();
 
             app.UseEndpoints(endpoints =>
